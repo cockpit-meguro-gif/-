@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>玉手箱・GAB対策② 言語をロジカルに</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f0f5fa;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Background elements */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 0;
+        }
+
+        .glow-top-left {
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background-color: rgba(240, 245, 250, 1);
+            border-radius: 50%;
+            top: -400px;
+            left: -300px;
+            z-index: 1;
+        }
+
+        .glow-bottom-right {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background-color: rgba(220, 240, 255, 0.4);
+            border-radius: 50%;
+            bottom: -300px;
+            right: -200px;
+            z-index: 1;
+        }
+
+        /* SVG Pattern */
+        .pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            padding: 25px 50px 0 50px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .title-container {
+            border-left: 4px solid #0066cc;
+            padding-left: 20px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            color: #0066cc;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        .header-decoration {
+            display: flex;
+            align-items: center;
+        }
+
+        .tech-line-header {
+            height: 1px;
+            width: 100px;
+            background-color: rgba(0, 102, 204, 0.3);
+            margin-right: 10px;
+        }
+
+        .tech-square {
+            width: 8px;
+            height: 8px;
+            background-color: #0066cc;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            margin-top: 95px;
+            padding: 0 50px;
+            display: flex;
+            flex-direction: column;
+            height: 580px;
+            z-index: 10;
+        }
+
+        /* Columns Wrapper */
+        .columns-wrapper {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            margin-bottom: 15px;
+        }
+
+        /* Column Common Styles */
+        .logic-column {
+            flex: 1;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
+        .logic-column::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #0066cc;
+        }
+
+        /* GAB Column Specific */
+        .gab-column {
+            border-left: 1px solid #e0e0e0;
+        }
+
+        /* IMAGES Column Specific */
+        .images-column {
+            border-left: 1px solid #e0e0e0;
+        }
+        
+        .images-column::before {
+            background: #00cc66;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .column-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .gab-icon {
+            background: rgba(0, 102, 204, 0.1);
+            color: #0066cc;
+        }
+
+        .images-icon {
+            background: rgba(0, 204, 102, 0.1);
+            color: #00cc66;
+        }
+
+        .column-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            letter-spacing: 0.05em;
+        }
+
+        .column-subtitle {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Flow Chart Styles */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            padding: 10px 12px;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            border-left: 3px solid #0066cc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            margin-bottom: 2px;
+        }
+
+        .flow-number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: rgba(0, 0, 0, 0.05);
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .flow-content {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .flow-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .flow-desc {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        .arrow-down {
+            align-self: center;
+            color: #ccc;
+            margin: -5px 0;
+            z-index: 2;
+            font-size: 12px;
+        }
+
+        /* Logic Decision Box */
+        .decision-box {
+            margin-top: auto;
+            background: #ffffff;
+            border: 1px dashed #0066cc;
+            padding: 12px;
+            position: relative;
+        }
+
+        .decision-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0066cc;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .logic-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .logic-option {
+            flex: 1;
+            text-align: center;
+            padding: 6px 4px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .logic-label {
+            display: block;
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .logic-val {
+            font-weight: 800;
+            font-size: 12px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .val-true { color: #00cc66; }
+        .val-false { color: #ff3366; }
+        .val-unknown { color: #ff9900; }
+
+        /* Bottom Pace Bar */
+        .pace-bar {
+            height: 50px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #ff3366;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .pace-icon {
+            font-size: 20px;
+            color: #ff3366;
+            margin-right: 15px;
+        }
+
+        .pace-text {
+            flex: 1;
+        }
+
+        .pace-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1px;
+        }
+
+        .pace-desc {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .pace-meter {
+            width: 180px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pace-fill {
+            height: 100%;
+            background-color: #00d9ff; /* Fallback */
+            width: 70%;
+            border-radius: 3px;
+        }
+
+        .pace-label {
+            position: absolute;
+            right: 0;
+            top: -18px;
+            font-size: 11px;
+            color: #ff3366;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            z-index: 20;
+        }
+
+        .company-name {
+            font-size: 11px;
+            color: #666;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .page-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        /* Tech Decorations */
+        .corner-bracket {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: rgba(0, 102, 204, 0.3);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .top-left { top: 95px; left: 40px; border-width: 2px 0 0 2px; }
+        .top-right { top: 95px; right: 40px; border-width: 2px 2px 0 0; }
+        .bottom-left { bottom: 45px; left: 40px; border-width: 0 0 2px 2px; }
+        .bottom-right { bottom: 45px; right: 40px; border-width: 0 2px 2px 0; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Layers -->
+<div class="bg-layer"></div>
+<div class="glow-top-left"></div>
+<div class="glow-bottom-right"></div>
+<!-- Pattern Overlay using SVG -->
+<svg class="pattern-overlay">
+<defs>
+<pattern height="40" id="grid-pattern" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid-pattern)" height="100%" width="100%"></rect>
+</svg>
+<!-- Header -->
+<div class="header">
+<div class="title-container">
+<h1 class="page-title">玉手箱・GAB対策② 言語をロジカルに</h1>
+<p class="page-subtitle">VERBAL STRATEGY</p>
+</div>
+<div class="header-decoration">
+<div class="tech-line-header"></div>
+<div class="tech-square"></div>
+</div>
+</div>
+<!-- Tech Corners -->
+<div class="corner-bracket top-left"></div>
+<div class="corner-bracket top-right"></div>
+<div class="corner-bracket bottom-left"></div>
+<div class="corner-bracket bottom-right"></div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Columns Wrapper -->
+<div class="columns-wrapper">
+<!-- Left Column: GAB Logic -->
+<div class="logic-column gab-column">
+<div class="column-header">
+<div class="column-icon gab-icon">
+<i class="fas fa-sitemap"></i>
+</div>
+<div>
+<h2 class="column-title">GAB形式</h2>
+<p class="column-subtitle">論理的読解 / LOGICAL READING</p>
+</div>
+</div>
+<div class="flow-container">
+<!-- Step 1 -->
+<div class="flow-step">
+<span class="flow-number">01</span>
+<div class="flow-content">
+<p class="flow-title">本文全体をざっと読む</p>
+<p class="flow-desc">まずは大枠のテーマと主張を掴む。細部にとらわれすぎない。</p>
+</div>
+</div>
+<i class="fas fa-caret-down arrow-down"></i>
+<!-- Step 2 -->
+<div class="flow-step">
+<span class="flow-number">02</span>
+<div class="flow-content">
+<p class="flow-title">設問を確認する</p>
+<p class="flow-desc">何を検証すべきかを把握し、本文の該当箇所を探す。</p>
+</div>
+</div>
+<i class="fas fa-caret-down arrow-down"></i>
+<!-- Step 3 -->
+<div class="flow-step">
+<span class="flow-number">03</span>
+<div class="flow-content">
+<p class="flow-title">選択肢を検証（言い換え注意）</p>
+<p class="flow-desc">本文の言葉が微妙に言い換えられている「トラップ」に注意。</p>
+</div>
+</div>
+<!-- Decision Box -->
+<div class="decision-box">
+<p class="decision-title">LOGIC CHECK / 判定基準</p>
+<div class="logic-options">
+<div class="logic-option">
+<span class="logic-label">本文にある</span>
+<span class="logic-val val-true">TRUE</span>
+</div>
+<div class="logic-option">
+<span class="logic-label">本文と矛盾</span>
+<span class="logic-val val-false">FALSE</span>
+</div>
+<div class="logic-option">
+<span class="logic-label">書かれていない</span>
+<span class="logic-val val-unknown">UNKNOWN</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: IMAGES Logic -->
+<div class="logic-column images-column">
+<div class="column-header">
+<div class="column-icon images-icon">
+<i class="fas fa-bullseye"></i>
+</div>
+<div>
+<h2 class="column-title">IMAGES形式</h2>
+<p class="column-subtitle">趣旨判定 / GIST JUDGMENT</p>
+</div>
+</div>
+<div class="flow-container">
+<!-- Step 1 -->
+<div class="flow-step" style="border-left-color: #00cc66;">
+<span class="flow-number">01</span>
+<div class="flow-content">
+<p class="flow-title">主張と根拠を見極める</p>
+<p class="flow-desc">「筆者が最も言いたいこと（主張）」と「それを支える事実（根拠）」を区別。</p>
+</div>
+</div>
+<i class="fas fa-caret-down arrow-down"></i>
+<!-- Step 2 -->
+<div class="flow-step" style="border-left-color: #00cc66;">
+<span class="flow-number">02</span>
+<div class="flow-content">
+<p class="flow-title">極端な表現に注意</p>
+<p class="flow-desc">「常に」「絶対に」「すべての」などの限定的表現は誤りの可能性大。</p>
+</div>
+</div>
+<i class="fas fa-caret-down arrow-down"></i>
+<!-- Step 3 -->
+<div class="flow-step" style="border-left-color: #00cc66;">
+<span class="flow-number">03</span>
+<div class="flow-content">
+<p class="flow-title">筆者の意図を捉える</p>
+<p class="flow-desc">本文に書かれていても、筆者の主張の本筋から外れるものは「趣旨」ではない。</p>
+</div>
+</div>
+<!-- Decision Box -->
+<div class="decision-box" style="border-color: #00cc66;">
+<p class="decision-title" style="color: #00cc66;">INTENT CHECK / 趣旨判定</p>
+<div class="logic-options">
+<div class="logic-option" style="border-color: rgba(0, 204, 102, 0.3);">
+<span class="logic-label">筆者の主張</span>
+<span class="logic-val val-true">YES</span>
+</div>
+<div class="logic-option" style="border-color: rgba(255, 51, 102, 0.3);">
+<span class="logic-label">主張と矛盾</span>
+<span class="logic-val val-false">NO</span>
+</div>
+<div class="logic-option" style="border-color: rgba(255, 153, 0, 0.3);">
+<span class="logic-label">関係なし</span>
+<span class="logic-val val-unknown">IRRELEVANT</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Pace Bar -->
+<div class="pace-bar">
+<i class="fas fa-stopwatch pace-icon"></i>
+<div class="pace-text">
+<p class="pace-title">TARGET PACE / 目標ペース</p>
+<p class="pace-desc">長文1題あたり（設問4問程度）を読み解く目安時間。</p>
+</div>
+<div class="pace-meter">
+<div class="pace-fill" style="background-color: #00cc66;"></div>
+<span class="pace-label">60-90 SEC</span>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p class="company-name">株式会社CockPit Recruitment</p>
+<p class="page-number">6/11</p>
+</div>
+</div>
+</body>
+</html>
