@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>玉手箱・GAB対策① 計数攻略</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f0f5fa;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Background elements */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 0;
+        }
+
+        .glow-top-left {
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background-color: rgba(240, 245, 250, 1);
+            border-radius: 50%;
+            top: -400px;
+            left: -300px;
+            z-index: 1;
+        }
+
+        .glow-bottom-right {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background-color: rgba(220, 240, 255, 0.4);
+            border-radius: 50%;
+            bottom: -300px;
+            right: -200px;
+            z-index: 1;
+        }
+
+        /* SVG Pattern */
+        .pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            padding: 25px 50px 0 50px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .title-container {
+            border-left: 4px solid #0066cc;
+            padding-left: 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            color: #0066cc;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        .header-decoration {
+            display: flex;
+            align-items: center;
+        }
+
+        .tech-line-header {
+            height: 1px;
+            width: 100px;
+            background-color: rgba(0, 102, 204, 0.3);
+            margin-right: 10px;
+        }
+
+        .tech-square {
+            width: 8px;
+            height: 8px;
+            background-color: #0066cc;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            margin-top: 100px;
+            padding: 0 50px;
+            display: flex;
+            height: 570px;
+            z-index: 10;
+            gap: 25px;
+        }
+
+        /* Left Column: Chart Reading Steps */
+        .left-column {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #0066cc;
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background-color: #0066cc;
+            transform: rotate(45deg);
+        }
+
+        .section-icon {
+            color: #0066cc;
+            font-size: 16px;
+            margin-right: 12px;
+            background: rgba(240, 245, 250, 1);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(0, 102, 204, 0.2);
+            border-radius: 4px;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 100%;
+            position: relative;
+        }
+
+        .step-connector {
+            position: absolute;
+            left: 18px;
+            top: 20px;
+            bottom: 20px;
+            width: 2px;
+            background-color: rgba(0, 102, 204, 0.15);
+            z-index: 0;
+        }
+
+        .step-item {
+            background: #ffffff;
+            border: 1px solid rgba(200, 200, 200, 0.3);
+            border-left: none;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 51, 102, 0.03);
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .step-item:hover {
+            transform: translateX(10px);
+            background: #f8faff;
+            border-color: rgba(0, 102, 204, 0.3);
+            box-shadow: 0 6px 15px rgba(0, 51, 102, 0.08);
+        }
+
+        .step-badge {
+            width: 36px;
+            height: 36px;
+            background: #0066cc;
+            border: 2px solid #e6f0fa;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            margin-right: 15px;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+            flex-shrink: 0;
+            position: relative;
+            border-radius: 50%;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            color: #1a1a2e;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .step-desc {
+            color: #555;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        /* Right Column: Tips & Calculator */
+        .right-column {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tips-box {
+            background: #ffffff;
+            border: 1px solid rgba(200, 200, 200, 0.3);
+            border-top: 4px solid #0066cc;
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            border-radius: 4px;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .tips-icon {
+            color: #0066cc;
+            font-size: 16px;
+            margin-right: 8px;
+        }
+
+        .tips-heading {
+            color: #333;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .tip-item {
+            background: #f9fafb;
+            padding: 8px 12px;
+            border-left: 3px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            border-radius: 2px;
+        }
+
+        .tip-item.accent {
+            border-left-color: #00d9ff;
+            background: #f0faff;
+        }
+
+        .tip-label {
+            color: #1a1a2e;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 1px;
+        }
+
+        .tip-text {
+            color: #666;
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .calc-box {
+            background: #f8fbff;
+            border: 1px solid #cce5ff;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 102, 204, 0.05);
+            border-radius: 4px;
+        }
+
+        .calc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed rgba(0, 102, 204, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .calc-title {
+            color: #0066cc;
+            font-size: 14px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+        }
+
+        .calc-status {
+            font-size: 9px;
+            color: #0066cc;
+            border: 1px solid #0066cc;
+            padding: 1px 5px;
+            border-radius: 2px;
+            background: #e6f0fa;
+            font-weight: 600;
+        }
+
+        .calc-tips {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .calc-tip-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            color: #444;
+            font-size: 11px;
+        }
+
+        .calc-tip-icon {
+            color: #00d9ff;
+            margin-right: 8px;
+            font-size: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background: #ffffff;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 20;
+        }
+
+        .company-name {
+            font-size: 12px;
+            color: #666;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .page-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        /* Tech Decorations */
+        .corner-bracket {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: rgba(0, 102, 204, 0.3);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .top-left { top: 110px; left: 40px; border-width: 2px 0 0 2px; }
+        .top-right { top: 110px; right: 40px; border-width: 2px 2px 0 0; }
+        .bottom-left { bottom: 50px; left: 40px; border-width: 0 0 2px 2px; }
+        .bottom-right { bottom: 50px; right: 40px; border-width: 0 2px 2px 0; }
+
+        .tech-bg-text {
+            position: absolute;
+            right: 30px;
+            top: 120px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 100px;
+            color: rgba(0, 0, 0, 0.03);
+            pointer-events: none;
+            z-index: 0;
+            transform: rotate(-90deg);
+            transform-origin: right top;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Layers -->
+<div class="bg-layer"></div>
+<div class="glow-top-left"></div>
+<div class="glow-bottom-right"></div>
+<!-- Pattern Overlay using SVG -->
+<svg class="pattern-overlay">
+<defs>
+<pattern height="86.6" id="hex-pattern" patternunits="userSpaceOnUse" width="50" x="0" y="0">
+<path d="M25 0 L50 14.4 L50 43.3 L25 57.7 L0 43.3 L0 14.4 Z" fill="none" stroke="#0066cc" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#hex-pattern)" height="100%" width="100%" x="0" y="0"></rect>
+</svg>
+<!-- Header -->
+<div class="header">
+<div class="title-container">
+<h1 class="page-title">玉手箱・GAB対策① 計数を速く正確に</h1>
+<p class="page-subtitle">QUANTITATIVE STRATEGY</p>
+</div>
+<div class="header-decoration">
+<div class="tech-line-header"></div>
+<div class="tech-square"></div>
+</div>
+</div>
+<!-- Tech Corners -->
+<div class="corner-bracket top-left"></div>
+<div class="corner-bracket top-right"></div>
+<div class="corner-bracket bottom-left"></div>
+<div class="corner-bracket bottom-right"></div>
+<!-- Background Tech Text -->
+<div class="tech-bg-text">QUANT</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Chart Reading Steps -->
+<div class="left-column">
+<div class="section-header">
+<div class="section-icon">
+<i class="fas fa-chart-bar"></i>
+</div>
+<h2 class="section-title">CHART READING STEPS / 図表読み取り手順</h2>
+</div>
+<div class="steps-container">
+<div class="step-connector"></div>
+<!-- Step 1 -->
+<div class="step-item">
+<div class="step-badge">01</div>
+<div class="step-content">
+<p class="step-title">単位と項目の確認</p>
+<p class="step-desc">まずは縦軸・横軸の単位（円、千人、％など）と項目を把握。特に「構成比」か「実数」かの違いに注意。</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-item">
+<div class="step-badge">02</div>
+<div class="step-content">
+<p class="step-title">増減パターンの把握</p>
+<p class="step-desc">グラフの全体的な傾向（右肩上がり、横ばい、急激な変化点）を瞬時に掴む。突出したデータを見逃さない。</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-item">
+<div class="step-badge">03</div>
+<div class="step-content">
+<p class="step-title">設問先読み</p>
+<p class="step-desc">何が問われているかを確認してから詳細を見る。「2020年の売上」ならその部分だけをピンポイントで計算。</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-item">
+<div class="step-badge">04</div>
+<div class="step-content">
+<p class="step-title">比率計算・概算</p>
+<p class="step-desc">「何倍か？」「前年比は？」等の計算を実行。選択肢が離れている場合は概算でスピードアップ。</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Tips & Calculator -->
+<div class="right-column">
+<!-- Calculation Tips -->
+<div class="tips-box">
+<div class="tips-header">
+<i class="fas fa-calculator tips-icon"></i>
+<p class="tips-heading">CALCULATION TIPS / 演算のコツ</p>
+</div>
+<div class="tips-grid">
+<div class="tip-item accent">
+<p class="tip-label">近似計算</p>
+<p class="tip-text">39,800円 → 4万、19.8% → 20% として計算。選択肢の幅を見て精度を調整。</p>
+</div>
+<div class="tip-item">
+<p class="tip-label">桁落とし</p>
+<p class="tip-text">大きな数字は下3桁をカットして計算。「0」の数を間違えないよう注意。</p>
+</div>
+<div class="tip-item accent">
+<p class="tip-label">分母共通化</p>
+<p class="tip-text">比較問題では、分母を揃えるか、または「1あたり」の数値を出す。</p>
+</div>
+<div class="tip-item">
+<p class="tip-label">差分思考</p>
+<p class="tip-text">AとBの比較なら、共通部分を無視して「差」だけに注目する。</p>
+</div>
+</div>
+</div>
+<!-- Calculator Strategy -->
+<div class="calc-box">
+<div class="calc-header">
+<p class="calc-title"><i class="fas fa-keyboard" style="margin-right:10px;"></i>電卓テクニック</p>
+<span class="calc-status">要確認</span>
+</div>
+<ul class="calc-tips">
+<li class="calc-tip-item">
+<i class="fas fa-check calc-tip-icon"></i>
+<span>Webテスト（玉手箱）は使用可が多い</span>
+</li>
+<li class="calc-tip-item">
+<i class="fas fa-check calc-tip-icon"></i>
+<span>メモリ機能（M+, MR）で計算結果を保存</span>
+</li>
+<li class="calc-tip-item">
+<i class="fas fa-check calc-tip-icon"></i>
+<span>「GT」キーで総計を一発出し</span>
+</li>
+<li class="calc-tip-item">
+<i class="fas fa-check calc-tip-icon"></i>
+<span>「利き手と逆」で打つ練習も有効</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p class="company-name">株式会社CockPit Recruitment</p>
+<p class="page-number">5/9</p>
+</div>
+</div>
+</body>
+</html>
