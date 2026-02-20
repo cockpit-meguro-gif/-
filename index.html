@@ -1,12 +1,97 @@
-const slides = [
-  "slide-01.html",  // 表紙
-  "slide-02.html",
-  "slide-03.html",
-  "slide-04.html",
-  "slide-05.html",
-  "slide-06.html",
-  "slide-07.html",
-  "slide-08.html",
-  "slide-09.html",
-  "slide-10.html"
-];
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMLスライドショー</title>
+    <style>
+        /* 画面全体のレイアウト設定 */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* 画面の高さを100%に */
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        /* スライドを表示するエリア（iframe） */
+        #slide-frame {
+            flex-grow: 1; /* 残りのスペースをすべて埋める */
+            border: none;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* 下部のコントロールパネル */
+        #controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            gap: 20px;
+        }
+
+        /* ボタンのデザイン */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #666; cursor: not-allowed; }
+        
+        #slide-counter { font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <iframe id="slide-frame" src="slide1.html"></iframe>
+
+    <div id="controls">
+        <button id="prev-btn" onclick="changeSlide(-1)" disabled>◀ 前へ</button>
+        <span id="slide-counter">1 / 10</span>
+        <button id="next-btn" onclick="changeSlide(1)">次へ ▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10; // スライドの総数
+
+        const iframe = document.getElementById('slide-frame');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const counter = document.getElementById('slide-counter');
+
+        // スライドを切り替える関数
+        function changeSlide(direction) {
+            currentSlide += direction;
+
+            // 範囲外に行かないように制御
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+
+            // iframeの読み込み先（src）を変更
+            iframe.src = `slide${currentSlide}.html`;
+
+            // カウンターの表示を更新
+            counter.textContent = `${currentSlide} / ${totalSlides}`;
+
+            // 1枚目なら「前へ」を無効化、10枚目なら「次へ」を無効化
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+        }
+    </script>
+
+</body>
+</html>
