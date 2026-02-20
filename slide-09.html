@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>時間配分の実践プレイブック</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f0f5fa;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Background elements */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 0;
+        }
+
+        .glow-top-left {
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background-color: rgba(240, 245, 250, 1);
+            border-radius: 50%;
+            top: -400px;
+            left: -300px;
+            z-index: 1;
+        }
+
+        .glow-bottom-right {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background-color: rgba(220, 240, 255, 0.4);
+            border-radius: 50%;
+            bottom: -300px;
+            right: -200px;
+            z-index: 1;
+        }
+
+        /* SVG Pattern */
+        .pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            padding: 30px 50px 0 50px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .title-container {
+            border-left: 4px solid #0066cc;
+            padding-left: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #0066cc;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        .header-decoration {
+            display: flex;
+            align-items: center;
+        }
+
+        .tech-line-header {
+            height: 1px;
+            width: 100px;
+            background-color: rgba(0, 102, 204, 0.3);
+            margin-right: 10px;
+        }
+
+        .tech-square {
+            width: 8px;
+            height: 8px;
+            background-color: #0066cc;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            margin-top: 105px;
+            padding: 0 50px;
+            display: flex;
+            flex-direction: column;
+            height: 575px;
+            z-index: 10;
+        }
+
+        /* Playbook Steps Container */
+        .playbook-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            height: 100%;
+            padding-bottom: 10px;
+        }
+
+        .step-row {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+            height: calc(50% - 10px);
+        }
+
+        .step-card {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            padding: 15px; /* Reduced padding */
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 51, 102, 0.03);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .step-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 51, 102, 0.08);
+            transform: translateY(-3px);
+            border-color: #0066cc;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 6px;
+        }
+
+        .step-number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 24px; /* Reduced font size */
+            color: rgba(0, 102, 204, 0.1);
+            line-height: 1;
+        }
+
+        .step-icon-wrapper {
+            width: 32px; /* Reduced size */
+            height: 32px;
+            background: #f0f5fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 102, 204, 0.1);
+        }
+
+        .step-icon {
+            color: #0066cc;
+            font-size: 16px; /* Reduced size */
+        }
+
+        .step-title {
+            font-size: 16px; /* Reduced font size */
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 2px;
+            letter-spacing: 0.05em;
+        }
+
+        .step-subtitle {
+            font-size: 10px;
+            color: #0066cc;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .action-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* Reduced gap */
+        }
+
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            background: #f8fbff;
+            padding: 8px 10px; /* Reduced padding */
+            border-left: 3px solid #ccc;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .action-item.highlight {
+            border-left-color: #00d9ff;
+            background: #f0f9ff;
+        }
+
+        .action-icon {
+            margin-right: 8px;
+            font-size: 12px;
+            margin-top: 3px;
+            color: #999;
+        }
+
+        .highlight .action-icon {
+            color: #00d9ff;
+        }
+
+        .action-text {
+            font-size: 11px; /* Reduced font size */
+            color: #555;
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        .highlight .action-text {
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+
+        /* Arrows between steps */
+        .arrow-connector {
+            position: absolute;
+            color: #0066cc;
+            font-size: 20px;
+            z-index: 5;
+            background: #fff;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 102, 204, 0.2);
+        }
+
+        .arrow-right {
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .arrow-left {
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(180deg);
+        }
+        
+        .arrow-down-icon {
+            position: absolute;
+            top: 50%;
+            right: 25%;
+            transform: translate(50%, -50%);
+            color: #0066cc;
+            font-size: 20px;
+            background: #fff;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 102, 204, 0.2);
+            z-index: 5;
+        }
+
+        /* Specific card styles */
+        .step-4 { border-top: 4px solid #ff3366; }
+        .step-4 .step-header { border-bottom-color: #ff3366; }
+        .step-4 .step-icon-wrapper { background: rgba(255, 51, 102, 0.05); border-color: rgba(255, 51, 102, 0.2); }
+        .step-4 .step-icon { color: #ff3366; }
+        .step-4 .step-subtitle { color: #ff3366; }
+        .step-4 .highlight { border-left-color: #ff3366; background: rgba(255, 51, 102, 0.05); }
+        .step-4 .highlight .action-icon { color: #ff3366; }
+        
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background: #ffffff;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 20;
+        }
+
+        .company-name {
+            font-size: 12px;
+            color: #666;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .page-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        /* Tech Decorations */
+        .corner-bracket {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: rgba(0, 102, 204, 0.3);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .top-left { top: 110px; left: 40px; border-width: 2px 0 0 2px; }
+        .top-right { top: 110px; right: 40px; border-width: 2px 2px 0 0; }
+        .bottom-left { bottom: 50px; left: 40px; border-width: 0 0 2px 2px; }
+        .bottom-right { bottom: 50px; right: 40px; border-width: 0 2px 2px 0; }
+
+        /* Flow Path Lines */
+        .flow-path {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .path-1-2 {
+            top: 25%;
+            left: 50%;
+            width: 60px;
+            height: 2px;
+            background: #0066cc;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+        }
+        
+        .path-2-3 {
+            top: 50%;
+            right: 25%;
+            width: 2px;
+            height: 60px;
+            background: #0066cc;
+            transform: translate(50%, -50%);
+            opacity: 0.3;
+        }
+        
+        .path-3-4 {
+            top: 75%;
+            left: 50%;
+            width: 60px;
+            height: 2px;
+            background: #0066cc;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Layers -->
+<div class="bg-layer"></div>
+<div class="glow-top-left"></div>
+<div class="glow-bottom-right"></div>
+<!-- Pattern Overlay using SVG -->
+<svg class="pattern-overlay">
+<defs>
+<pattern height="40" id="hex-pattern" patternunits="userSpaceOnUse" width="50" x="0" y="0">
+<path d="M25 0 L50 14.4 L50 43.3 L25 57.7 L0 43.3 L0 14.4 Z" fill="none" stroke="#0066cc" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#hex-pattern)" height="100%" width="100%" x="0" y="0"></rect>
+</svg>
+<!-- Header -->
+<div class="header">
+<div class="title-container">
+<h1 class="page-title">時間配分の実践プレイブック</h1>
+<p class="page-subtitle">TIME MANAGEMENT PLAYBOOK</p>
+</div>
+<div class="header-decoration">
+<div class="tech-line-header"></div>
+<div class="tech-square"></div>
+</div>
+</div>
+<!-- Tech Corners -->
+<div class="corner-bracket top-left"></div>
+<div class="corner-bracket top-right"></div>
+<div class="corner-bracket bottom-left"></div>
+<div class="corner-bracket bottom-right"></div>
+<!-- Flow Path Lines -->
+<div class="flow-path path-1-2"></div>
+<div class="flow-path path-2-3"></div>
+<div class="flow-path path-3-4"></div>
+<!-- Flow Indicators -->
+<div class="arrow-connector arrow-right">
+<i class="fas fa-arrow-right"></i>
+</div>
+<div class="arrow-down-icon">
+<i class="fas fa-arrow-down"></i>
+</div>
+<div class="arrow-connector arrow-left">
+<i class="fas fa-arrow-left"></i>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<div class="playbook-container">
+<!-- Row 1: Step 1 & 2 -->
+<div class="step-row">
+<!-- Step 1 -->
+<div class="step-card">
+<div class="step-header">
+<div class="step-icon-wrapper">
+<i class="fas fa-flag-checkered step-icon"></i>
+</div>
+<span class="step-number">01</span>
+</div>
+<h2 class="step-title">開始直後</h2>
+<span class="step-subtitle">START PHASE</span>
+<div class="action-list">
+<div class="action-item highlight">
+<i class="fas fa-eye action-icon"></i>
+<p class="action-text">全体の時間と問題数を確認し、1問あたりのペースを再計算</p>
+</div>
+<div class="action-item">
+<i class="fas fa-trash-alt action-icon"></i>
+<p class="action-text">「捨て問」の基準（未学習分野、長文推論など）をセット</p>
+</div>
+<div class="action-item">
+<i class="fas fa-search action-icon"></i>
+<p class="action-text">解きやすい問題から着手し、リズムを作る</p>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-card">
+<div class="step-header">
+<div class="step-icon-wrapper">
+<i class="fas fa-running step-icon"></i>
+</div>
+<span class="step-number">02</span>
+</div>
+<h2 class="step-title">進行中</h2>
+<span class="step-subtitle">MIDDLE PHASE</span>
+<div class="action-list">
+<div class="action-item highlight">
+<i class="fas fa-stopwatch action-icon"></i>
+<p class="action-text">1問60秒基準を死守。ハマりそうになったら即座に判断</p>
+</div>
+<div class="action-item">
+<i class="fas fa-sign-out-alt action-icon"></i>
+<p class="action-text">2分考えて解法が見えなければ「撤退」。マークして次へ</p>
+</div>
+<div class="action-item">
+<i class="fas fa-check-circle action-icon"></i>
+<p class="action-text">正解できる問題を確実に拾うことを優先</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 2: Step 4 & 3 (Reverse order for visual flow) -->
+<div class="step-row" style="flex-direction: row-reverse;">
+<!-- Step 3 -->
+<div class="step-card">
+<div class="step-header">
+<div class="step-icon-wrapper">
+<i class="fas fa-tachometer-alt step-icon"></i>
+</div>
+<span class="step-number">03</span>
+</div>
+<h2 class="step-title">中盤戦</h2>
+<span class="step-subtitle">ACCELERATION</span>
+<div class="action-list">
+<div class="action-item highlight">
+<i class="fas fa-bolt action-icon"></i>
+<p class="action-text">得意分野が来たら連打で解答し、時間を貯金する</p>
+</div>
+<div class="action-item">
+<i class="fas fa-flag action-icon"></i>
+<p class="action-text">迷った問題は「見直しフラグ」を立ててとりあえず進む</p>
+</div>
+<div class="action-item">
+<i class="fas fa-chart-line action-icon"></i>
+<p class="action-text">集中力を維持し、ケアレスミスを防ぐ</p>
+</div>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-card step-4">
+<div class="step-header">
+<div class="step-icon-wrapper">
+<i class="fas fa-hourglass-end step-icon"></i>
+</div>
+<span class="step-number">04</span>
+</div>
+<h2 class="step-title">終盤（ラスト3分）</h2>
+<span class="step-subtitle">FINAL SPRINT</span>
+<div class="action-list">
+<div class="action-item highlight">
+<i class="fas fa-paint-brush action-icon"></i>
+<p class="action-text">未回答のマークを全て塗りつぶす（空欄は絶対NG）</p>
+</div>
+<div class="action-item">
+<i class="fas fa-undo action-icon"></i>
+<p class="action-text">見直しは「計算ミス」のチェックを最優先に</p>
+</div>
+<div class="action-item">
+<i class="fas fa-check-double action-icon"></i>
+<p class="action-text">最後の1秒まで諦めずに粘る</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p class="company-name">株式会社CockPit Recruitment</p>
+<p class="page-number">9/10</p>
+</div>
+</div>
+</div></body>
+</html>
