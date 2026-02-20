@@ -81,7 +81,7 @@
             if (currentSlide < 1) currentSlide = 1;
             if (currentSlide > totalSlides) currentSlide = totalSlides;
 
-            // iframeの読み込み先（src）を変更
+            // ★修正ポイント: ハイフンを削除して slide1.html の形式に合わせました
             iframe.src = `slide-${currentSlide}.html`;
 
             // カウンターの表示を更新
