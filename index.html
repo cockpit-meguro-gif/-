@@ -82,7 +82,7 @@
             if (currentSlide > totalSlides) currentSlide = totalSlides;
 
             // ★修正ポイント: ハイフンを削除して slide1.html の形式に合わせました
-            iframe.src = `slide-${currentSlide}.html`;
+            iframe.src = `slide${currentSlide}.html`;
 
             // カウンターの表示を更新
             counter.textContent = `${currentSlide} / ${totalSlides}`;
