@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SPI対策② 必須公式&amp;時間配分</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f0f5fa;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Background elements */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 0;
+        }
+
+        .glow-top-left {
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background-color: rgba(240, 245, 250, 1);
+            border-radius: 50%;
+            top: -400px;
+            left: -300px;
+            z-index: 1;
+        }
+
+        .glow-bottom-right {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background-color: rgba(220, 240, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(80px);
+            bottom: -300px;
+            right: -200px;
+            z-index: 1;
+        }
+
+        /* SVG Pattern */
+        .pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            padding: 30px 50px 0 50px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .title-container {
+            border-left: 4px solid #0066cc;
+            padding-left: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #0066cc;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        .header-decoration {
+            display: flex;
+            align-items: center;
+        }
+
+        .tech-line-header {
+            height: 1px;
+            width: 100px;
+            background-color: rgba(0, 102, 204, 0.3);
+            margin-right: 10px;
+        }
+
+        .tech-square {
+            width: 8px;
+            height: 8px;
+            background-color: #0066cc;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            margin-top: 110px;
+            padding: 0 50px;
+            display: flex;
+            height: 540px;
+            z-index: 10;
+            gap: 30px;
+        }
+
+        /* Left Column: Formulas Grid */
+        .formulas-container {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 8px;
+            position: relative;
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #00d9ff;
+        }
+
+        .section-icon {
+            color: #0066cc;
+            font-size: 18px;
+            margin-right: 12px;
+            background: rgba(240, 245, 255, 1);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+        }
+
+        .section-title {
+            color: #1a1a2e;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            height: 100%;
+        }
+
+        .formula-card {
+            background: #f8f9fa;
+            border: 1px solid rgba(200, 200, 200, 0.5);
+            border-left: 4px solid #0066cc;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            border-radius: 4px;
+        }
+
+        .formula-card:hover {
+            background: #ffffff;
+            border-color: #0066cc;
+            box-shadow: 0 8px 15px rgba(0, 102, 204, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+            padding-bottom: 4px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0066cc;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        .card-icon {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .formula-content {
+            background: #ffffff;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .formula-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            color: #333;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .formula-note {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        /* Right Column: Time Management */
+        .time-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border: 1px solid rgba(0, 102, 204, 0.1);
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 51, 102, 0.05);
+            border-radius: 4px;
+        }
+
+        .time-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            border-top: 3px solid #0066cc;
+            border-right: 3px solid #0066cc;
+        }
+
+        .time-strategy-box {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        .strategy-point {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .strategy-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(0, 102, 204, 0.05);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            color: #0066cc;
+            font-size: 12px;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 102, 204, 0.1);
+        }
+
+        .strategy-text-box {
+            flex: 1;
+        }
+
+        .strategy-head {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 3px;
+        }
+
+        .strategy-detail {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .skip-rule-box {
+            background: #fff5f5;
+            border: 1px solid #ffcccc;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skip-rule-box::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #ff6b6b;
+        }
+
+        .skip-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #d63031;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .skip-content {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background: #ffffff;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 20;
+        }
+
+        .company-name {
+            font-size: 12px;
+            color: #666;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .page-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        /* Tech Decorations */
+        .corner-bracket {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: rgba(0, 102, 204, 0.2);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .top-left { top: 110px; left: 40px; border-width: 2px 0 0 2px; }
+        .top-right { top: 110px; right: 40px; border-width: 2px 2px 0 0; }
+        .bottom-left { bottom: 50px; left: 40px; border-width: 0 0 2px 2px; }
+        .bottom-right { bottom: 50px; right: 40px; border-width: 0 2px 2px 0; }
+
+        .highlight-text {
+            color: #0066cc;
+            font-weight: 700;
+            background-color: rgba(0, 102, 204, 0.05);
+            padding: 0 4px;
+            border-radius: 2px;
+        }
+        
+        .danger-text {
+            color: #d63031;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Layers -->
+<div class="bg-layer"></div>
+<div class="glow-top-left"></div>
+<div class="glow-bottom-right"></div>
+<!-- Pattern Overlay using SVG -->
+<svg class="pattern-overlay">
+<defs>
+<pattern height="40" id="hex-pattern" patternunits="userSpaceOnUse" width="50" x="0" y="0">
+<path d="M25 0 L50 14.4 L50 43.3 L25 57.7 L0 43.3 L0 14.4 Z" fill="none" stroke="#0066cc" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#hex-pattern)" height="100%" width="100%" x="0" y="0"></rect>
+</svg>
+<!-- Header -->
+<div class="header">
+<div class="title-container">
+<h1 class="page-title">SPI対策② 必須公式&amp;時間配分</h1>
+<p class="page-subtitle">FORMULAS &amp; TIME MANAGEMENT</p>
+</div>
+<div class="header-decoration">
+<div class="tech-line-header"></div>
+<div class="tech-square"></div>
+</div>
+</div>
+<!-- Tech Corners -->
+<div class="corner-bracket top-left"></div>
+<div class="corner-bracket top-right"></div>
+<div class="corner-bracket bottom-left"></div>
+<div class="corner-bracket bottom-right"></div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Formulas -->
+<div class="formulas-container">
+<div class="section-header">
+<div class="section-icon">
+<i class="fas fa-square-root-alt"></i>
+</div>
+<h2 class="section-title">ESSENTIAL FORMULAS / 必須公式一覧</h2>
+</div>
+<div class="grid-container">
+<!-- Card 1 -->
+<div class="formula-card">
+<div class="card-header">
+<p class="card-title">割合・比</p>
+<i class="fas fa-percent card-icon"></i>
+</div>
+<div class="formula-content">
+<p class="formula-text">比べられる量 ÷ もとにする量 = 割合</p>
+</div>
+<p class="formula-note">「AはBの何倍か？」→ A÷B。<br/>内項の積＝外項の積（A:B=C:D → AD=BC）も必須。</p>
+</div>
+<!-- Card 2 -->
+<div class="formula-card">
+<div class="card-header">
+<p class="card-title">損益算</p>
+<i class="fas fa-tags card-icon"></i>
+</div>
+<div class="formula-content">
+<p class="formula-text">原価 × (1 + 利益率) = 定価</p>
+<p class="formula-text" style="margin-top:4px;">定価 × (1 - 割引率) = 売価</p>
+</div>
+<p class="formula-note">「利益＝売価－原価」の基本を忘れずに。<br/>原価を1または100とおくと計算しやすい。</p>
+</div>
+<!-- Card 3 -->
+<div class="formula-card">
+<div class="card-header">
+<p class="card-title">濃度算</p>
+<i class="fas fa-flask card-icon"></i>
+</div>
+<div class="formula-content">
+<p class="formula-text">食塩の量 ÷ 食塩水の量 × 100 = 濃度(%)</p>
+</div>
+<p class="formula-note">「食塩の量」に注目して立式するのが鉄則。<br/>水を蒸発させても食塩の量は変わらない。</p>
+</div>
+<!-- Card 4 -->
+<div class="formula-card">
+<div class="card-header">
+<p class="card-title">速度算</p>
+<i class="fas fa-tachometer-alt card-icon"></i>
+</div>
+<div class="formula-content">
+<p class="formula-text">距離 = 速さ × 時間 （き・は・じ）</p>
+<p class="formula-text" style="margin-top:4px;">旅人算：出会い＝和、追いつき＝差</p>
+</div>
+<p class="formula-note">単位換算（時速⇔分速⇔秒速）に注意。<br/>通過算は「列車長＋トンネル長」が移動距離。</p>
+</div>
+<!-- Card 5 -->
+<div class="formula-card">
+<div class="card-header">
+<p class="card-title">仕事算</p>
+<i class="fas fa-user-clock card-icon"></i>
+</div>
+<div class="formula-content">
+<p class="formula-text">全体の仕事量を「1」とおく</p>
+</div>
+<p class="formula-note">Aが10日で完了→1日の仕事量は1/10。<br/>複数の人が協力する場合は、1日の仕事量を足す。</p>
+</div>
+<!-- Card 6 -->
+<div class="formula-card">
+<div class="card-header">
+<p class="card-title">場合の数・確率</p>
+<i class="fas fa-dice card-icon"></i>
+</div>
+<div class="formula-content">
+<p class="formula-text">順列 nPr / 組合せ nCr</p>
+<p class="formula-text" style="margin-top:4px;">確率 = 特定の場合の数 ÷ 全事象</p>
+</div>
+<p class="formula-note">並べるならP、選ぶだけならC。<br/>余事象（「少なくとも1つ」→1-それ以外）を活用。</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Time Management -->
+<div class="time-container">
+<div class="section-header">
+<div class="section-icon">
+<i class="fas fa-hourglass-half"></i>
+</div>
+<h2 class="section-title">TIME STRATEGY / 時間戦略</h2>
+</div>
+<div class="time-strategy-box">
+<div class="strategy-point">
+<div class="strategy-icon">
+<i class="fas fa-stopwatch"></i>
+</div>
+<div class="strategy-text-box">
+<p class="strategy-head">1問あたりの目安時間</p>
+<p class="strategy-detail">SPIはスピード勝負。<br/><span class="highlight-text">30〜60秒</span>で1問を処理するペースを身体で覚える。</p>
+</div>
+</div>
+<div class="strategy-point">
+<div class="strategy-icon">
+<i class="fas fa-chart-line"></i>
+</div>
+<div class="strategy-text-box">
+<p class="strategy-head">テストセンターの特性</p>
+<p class="strategy-detail">正解すると難易度が上がり、高得点につながる。<br/><span class="highlight-text">序盤の問題は絶対に落とさない</span>慎重さが必要。</p>
+</div>
+</div>
+<div class="strategy-point">
+<div class="strategy-icon">
+<i class="fas fa-forward"></i>
+</div>
+<div class="strategy-text-box">
+<p class="strategy-head">「見切り」の重要性</p>
+<p class="strategy-detail">1問に時間をかけすぎると全体の崩壊を招く。<br/>解けない問題に固執せず、未回答を避ける。</p>
+</div>
+</div>
+</div>
+<div class="skip-rule-box">
+<p class="skip-title"><i class="fas fa-exclamation-triangle" style="margin-right:8px;"></i>SKIP RULE / 飛ばし基準</p>
+<div class="skip-content">
+<p style="margin-bottom:8px;">以下の場合は即座に「適当にマークして次へ」進む勇気を持つ：</p>
+<ul style="list-style-type: disc; padding-left: 20px;">
+<li>問題文を読んでも<span class="danger-text">解法が全く浮かばない</span></li>
+<li>計算が複雑すぎて<span class="danger-text">2分以上</span>かかりそう</li>
+<li>残り時間が少なく、まだ未回答が多い</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p class="company-name">株式会社CockPit Recruitment</p>
+<p class="page-number">4/11</p>
+</div>
+</div>
+</body>
+</html>
