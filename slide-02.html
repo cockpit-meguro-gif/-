@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>適性検査とは？全体像と見分け方</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f0f5fa;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Background elements */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 0;
+        }
+
+        .glow-top-left {
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background-color: rgba(240, 245, 250, 1);
+            border-radius: 50%;
+            top: -400px;
+            left: -300px;
+            z-index: 1;
+        }
+
+        .glow-bottom-right {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background-color: rgba(220, 240, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(80px);
+            bottom: -300px;
+            right: -200px;
+            z-index: 1;
+        }
+
+        /* SVG Pattern */
+        .pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            padding: 30px 50px 0 50px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .title-container {
+            border-left: 4px solid #0066cc;
+            padding-left: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #0066cc;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        .header-decoration {
+            display: flex;
+            align-items: center;
+        }
+
+        .tech-line-header {
+            height: 1px;
+            width: 100px;
+            background-color: rgba(0, 102, 204, 0.3);
+            margin-right: 10px;
+        }
+
+        .tech-square {
+            width: 8px;
+            height: 8px;
+            background-color: #0066cc;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            margin-top: 110px;
+            padding: 0 50px;
+            display: flex;
+            flex-direction: column;
+            height: 560px;
+            z-index: 10;
+        }
+
+        /* Top Cards Section */
+        .points-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .point-card {
+            width: 32%;
+            background: rgba(248, 249, 250, 0.9);
+            border: 1px solid #e0e0e0;
+            border-top: 3px solid #0066cc;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .point-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            border-top: 1px solid rgba(0, 102, 204, 0.3);
+            border-right: 1px solid rgba(0, 102, 204, 0.3);
+        }
+
+        .point-icon-box {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 102, 204, 0.05);
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            border: 1px solid rgba(0, 102, 204, 0.1);
+        }
+
+        .point-icon {
+            font-size: 24px;
+            color: #0066cc;
+        }
+
+        .point-text-box {
+            flex: 1;
+        }
+
+        .point-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 2px;
+        }
+
+        .point-desc {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.3;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+        }
+
+        .table-container {
+            flex: 2;
+            background: #ffffff;
+            border: 1px solid rgba(0, 102, 204, 0.15);
+            border-radius: 4px;
+            padding: 0;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+        
+        /* Custom Table Styling */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .tech-table th {
+            background-color: rgba(240, 245, 250, 0.8);
+            color: #0066cc;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #0066cc;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        .tech-table td {
+            padding: 15px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-table tr:hover td {
+            background-color: rgba(0, 102, 204, 0.02);
+        }
+
+        .test-name {
+            font-weight: 800;
+            font-size: 16px;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+        }
+
+        .test-indicator {
+            width: 4px;
+            height: 16px;
+            margin-right: 10px;
+            background-color: #0066cc;
+        }
+
+        .difficulty-bar-container {
+            width: 80px;
+            height: 6px;
+            background-color: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .difficulty-bar {
+            height: 100%;
+            background-color: #0066cc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 2px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .badge-blue {
+            background-color: rgba(0, 102, 204, 0.08);
+            border: 1px solid rgba(0, 102, 204, 0.2);
+            color: #0066cc;
+        }
+
+        .badge-cyan {
+            background-color: rgba(0, 217, 255, 0.08);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            color: #0099cc;
+        }
+
+        /* Tips Section */
+        .tips-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tips-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #0066cc;
+            padding: 20px;
+            position: relative;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .tips-title {
+            font-weight: 700;
+            color: #0066cc;
+            font-size: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .tips-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            z-index: 20;
+        }
+
+        .company-name {
+            font-size: 12px;
+            color: #666;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .page-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        /* Tech Decorations */
+        .corner-bracket {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: rgba(0, 102, 204, 0.3);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .top-left { top: 110px; left: 40px; border-width: 2px 0 0 2px; }
+        .top-right { top: 110px; right: 40px; border-width: 2px 2px 0 0; }
+        .bottom-left { bottom: 50px; left: 40px; border-width: 0 0 2px 2px; }
+        .bottom-right { bottom: 50px; right: 40px; border-width: 0 2px 2px 0; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Layers -->
+<div class="bg-layer"></div>
+<div class="glow-top-left"></div>
+<div class="glow-bottom-right"></div>
+<!-- Pattern Overlay using SVG -->
+<svg class="pattern-overlay">
+<defs>
+<pattern height="86.6" id="hex-pattern" patternunits="userSpaceOnUse" width="50" x="0" y="0">
+<path d="M25 0 L50 14.4 L50 43.3 L25 57.7 L0 43.3 L0 14.4 Z" fill="none" stroke="#0066cc" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#hex-pattern)" height="100%" width="100%" x="0" y="0"></rect>
+</svg>
+<!-- Header -->
+<div class="header">
+<div class="title-container">
+<h1 class="page-title">適性検査とは？全体像と見分け方</h1>
+<p class="page-subtitle">WHAT IS APTITUDE TEST?</p>
+</div>
+<div class="header-decoration">
+<div class="tech-line-header"></div>
+<div class="tech-square"></div>
+</div>
+</div>
+<!-- Tech Corners -->
+<div class="corner-bracket top-left"></div>
+<div class="corner-bracket top-right"></div>
+<div class="corner-bracket bottom-left"></div>
+<div class="corner-bracket bottom-right"></div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Top Points Section -->
+<div class="points-section">
+<div class="point-card">
+<div class="point-icon-box">
+<i class="fas fa-brain point-icon"></i>
+</div>
+<div class="point-text-box">
+<p class="point-title">基礎学力・思考力</p>
+<p class="point-desc">言語理解、数理処理、論理的思考など、業務遂行に必要な知的能力を測定。</p>
+</div>
+</div>
+<div class="point-card">
+<div class="point-icon-box">
+<i class="fas fa-briefcase point-icon"></i>
+</div>
+<div class="point-text-box">
+<p class="point-title">仕事への適性</p>
+<p class="point-desc">職務適性、ストレス耐性、行動特性など、実際の業務でのパフォーマンス予測。</p>
+</div>
+</div>
+<div class="point-card">
+<div class="point-icon-box">
+<i class="fas fa-user-check point-icon"></i>
+</div>
+<div class="point-text-box">
+<p class="point-title">組織・性格適合</p>
+<p class="point-desc">企業風土とのマッチング、チームワーク、価値観の一致度などを判断。</p>
+</div>
+</div>
+</div>
+<!-- Comparison Section -->
+<div class="comparison-section">
+<!-- Comparison Table -->
+<div class="table-container">
+<table class="tech-table">
+<thead>
+<tr>
+<th width="20%">検査種類</th>
+<th width="25%">科目構成</th>
+<th width="25%">実施形式</th>
+<th width="30%">特徴・難易度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div class="test-name">
+<div class="test-indicator"></div>
+                                    SPI3
+                                </div>
+</td>
+<td>
+<span class="badge badge-blue">言語</span>
+<span class="badge badge-blue">非言語</span>
+<span class="badge badge-cyan">性格</span>
+</td>
+<td>テストセンター<br/>Webテスティング<br/>ペーパー</td>
+<td>
+<p style="margin-bottom:2px; font-weight:600;">基礎能力重視</p>
+<div style="display:flex; align-items:center;">
+<span style="font-size:10px; color:#888; margin-right:5px;">難度</span>
+<div class="difficulty-bar-container">
+<div class="difficulty-bar" style="width: 60%"></div>
+</div>
+</div>
+<p style="font-size:11px; color:#888; margin-top:2px;">中学～高校レベルの基礎</p>
+</td>
+</tr>
+<tr>
+<td>
+<div class="test-name">
+<div class="test-indicator"></div>
+                                    玉手箱
+                                </div>
+</td>
+<td>
+<span class="badge badge-blue">計数</span>
+<span class="badge badge-blue">言語</span>
+<span class="badge badge-blue">英語</span>
+<span class="badge badge-cyan">性格</span>
+</td>
+<td>Webテスト<br/>(自宅受験が主流)</td>
+<td>
+<p style="margin-bottom:2px; font-weight:600;">スピード・正確性</p>
+<div style="display:flex; align-items:center;">
+<span style="font-size:10px; color:#888; margin-right:5px;">難度</span>
+<div class="difficulty-bar-container">
+<div class="difficulty-bar" style="width: 80%"></div>
+</div>
+</div>
+<p style="font-size:11px; color:#888; margin-top:2px;">問題数多く時間が短い</p>
+</td>
+</tr>
+<tr>
+<td>
+<div class="test-name">
+<div class="test-indicator"></div>
+                                    GAB
+                                </div>
+</td>
+<td>
+<span class="badge badge-blue">計数</span>
+<span class="badge badge-blue">言語</span>
+<span class="badge badge-cyan">性格</span>
+</td>
+<td>C-GAB(テスセン)<br/>Web-GAB<br/>筆記</td>
+<td>
+<p style="margin-bottom:2px; font-weight:600;">論理的思考力</p>
+<div style="display:flex; align-items:center;">
+<span style="font-size:10px; color:#888; margin-right:5px;">難度</span>
+<div class="difficulty-bar-container">
+<div class="difficulty-bar" style="width: 90%"></div>
+</div>
+</div>
+<p style="font-size:11px; color:#888; margin-top:2px;">長文読解と図表読み取り</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Side Tips -->
+<div class="tips-container">
+<div class="tips-card">
+<p class="tips-title"><i class="fas fa-search" style="margin-right:8px;"></i>見分け方のポイント</p>
+<ul class="tips-list">
+<li>
+<strong style="color:#333;">WebテストのURLを確認</strong><br/>
+                            SPI: arorua.net<br/>
+                            玉手箱/GAB: e-exams, c-gab
+                        </li>
+<li>
+<strong style="color:#333;">科目・時間設定</strong><br/>
+                            玉手箱は「計数9分」など独特な設定が多い
+                        </li>
+<li>
+<strong style="color:#333;">電卓の使用可否</strong><br/>
+                            SPIテストセンター: 不可<br/>
+                            玉手箱(自宅): 使用可<br/>
+                            C-GAB: 不可
+                        </li>
+</ul>
+</div>
+<div class="tips-card" style="border-left-color: #0099cc; background: #ffffff;">
+<p class="tips-title" style="color: #0099cc;"><i class="fas fa-bullseye" style="margin-right:8px;"></i>対策の優先順位</p>
+<p style="font-size:13px; color:#555; line-height:1.6;">
+                        志望企業の導入実績を確認し、最も頻出の形式から対策。<br/>
+                        迷ったら汎用性の高い<strong style="color:#0066cc;">SPI対策から始める</strong>のが王道。
+                    </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p class="company-name">株式会社CockPit Recruitment</p>
+<p class="page-number">2/11</p>
+</div>
+</div>
+</body>
+</html>
