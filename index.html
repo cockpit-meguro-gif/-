@@ -82,7 +82,7 @@
             if (currentSlide > totalSlides) currentSlide = totalSlides;
 
             // iframeの読み込み先（src）を変更
-            iframe.src = `slide${currentSlide}.html`;
+            iframe.src = `slide-${currentSlide}.html`;
 
             // カウンターの表示を更新
             counter.textContent = `${currentSlide} / ${totalSlides}`;
